@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Vehículos y Documentos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Vehículos y Documentos</h1>
+
+        <div class="section">
+            <h2>Vehículos</h2>
+            <form id="vehiculoForm">
+                <label for="tipoVehiculo">Tipo de Vehículo:</label>
+                <input type="text" id="tipoVehiculo" required>
+
+                <label for="placa">Placa:</label>
+                <input type="text" id="placa" required>
+
+                <label for="tipoServicio">Tipo de Servicio:</label>
+                <input type="text" id="tipoServicio" required>
+
+                <label for="combustible">Combustible:</label>
+                <input type="text" id="combustible" required>
+
+                <label for="capacidadPasajeros">Capacidad de Pasajeros:</label>
+                <input type="number" id="capacidadPasajeros" required>
+
+                <label for="color">Color:</label>
+                <input type="text" id="color" required>
+
+                <label for="modelo">Modelo:</label>
+                <input type="number" id="modelo" required>
+
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" required>
+
+                <label for="linea">Línea:</label>
+                <input type="text" id="linea" required>
+
+                <button type="submit">Agregar Vehículo</button>
+            </form>
+
+            <h3>Lista de Vehículos</h3>
+            <ul id="vehiculosList"></ul>
+        </div>
+
+        <div class="section">
+            <h2>Documentos</h2>
+            <form id="documentoForm">
+                <label for="codigo">Código:</label>
+                <input type="text" id="codigo" required>
+
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" required>
+
+                <label for="tipoVehiculoAplica">Tipo de Vehículo que Aplica:</label>
+                <input type="text" id="tipoVehiculoAplica" required>
+
+                <label for="obligatorio">Obligatorio:</label>
+                <select id="obligatorio" required>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                </select>
+
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" required></textarea>
+
+                <button type="submit">Agregar Documento</button>
+            </form>
+
+            <h3>Lista de Documentos</h3>
+            <ul id="documentosList"></ul>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = 'http://localhost:8080'; // Ajusta si es necesario
+
+        // Función para cargar vehículos
+        async function loadVehiculos() {
+            try {
+                const response = await fetch(`${baseUrl}/vehiculos`);
+                const vehiculos = await response.json();
+                const list = document.getElementById('vehiculosList');
+                list.innerHTML = '';
+                vehiculos.forEach(v => {
+                    const li = document.createElement('li');
+                    li.textContent = `${v.tipoVehiculo} - ${v.placa} - ${v.marca} ${v.linea} (${v.modelo})`;
+                    list.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error cargando vehículos:', error);
+            }
+        }
+
+        // Función para cargar documentos
+        async function loadDocumentos() {
+            try {
+                const response = await fetch(`${baseUrl}/documentos`);
+                const documentos = await response.json();
+                const list = document.getElementById('documentosList');
+                list.innerHTML = '';
+                documentos.forEach(d => {
+                    const li = document.createElement('li');
+                    li.textContent = `${d.nombre} (${d.codigo}) - ${d.descripcion}`;
+                    list.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error cargando documentos:', error);
+            }
+        }
+
+        // Evento para agregar vehículo
+        document.getElementById('vehiculoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const vehiculo = {
+                tipoVehiculo: document.getElementById('tipoVehiculo').value,
+                placa: document.getElementById('placa').value,
+                tipoServicio: document.getElementById('tipoServicio').value,
+                combustible: document.getElementById('combustible').value,
+                capacidadPasajeros: parseInt(document.getElementById('capacidadPasajeros').value),
+                color: document.getElementById('color').value,
+                modelo: parseInt(document.getElementById('modelo').value),
+                marca: document.getElementById('marca').value,
+                linea: document.getElementById('linea').value
+            };
+            try {
+                await fetch(`${baseUrl}/vehiculos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(vehiculo)
+                });
+                loadVehiculos();
+                document.getElementById('vehiculoForm').reset();
+            } catch (error) {
+                console.error('Error agregando vehículo:', error);
+            }
+        });
+
+        // Evento para agregar documento
+        document.getElementById('documentoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const documento = {
+                codigo: document.getElementById('codigo').value,
+                nombre: document.getElementById('nombre').value,
+                tipoVehiculoAplica: document.getElementById('tipoVehiculoAplica').value,
+                obligatorio: document.getElementById('obligatorio').value,
+                descripcion: document.getElementById('descripcion').value
+            };
+            try {
+                await fetch(`${baseUrl}/documentos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(documento)
+                });
+                loadDocumentos();
+                document.getElementById('documentoForm').reset();
+            } catch (error) {
+                console.error('Error agregando documento:', error);
+            }
+        });
+
+        // Cargar datos al inicio
+        loadVehiculos();
+        loadDocumentos();
+    </script>
+</body>
+</html>
