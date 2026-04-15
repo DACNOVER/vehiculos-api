@@ -1,5 +1,6 @@
 package api.rest.vehiculos.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -18,6 +19,7 @@ public class Vehiculo {
     private TipoVehiculo tipoVehiculo;
 
     @NotBlank
+    @Column(unique = true)
     @Pattern(
         regexp = "^[A-Z]{3}[0-9]{3}$|^[A-Z]{3}[0-9]{2}[A-Z]$",
         message = "Formato de placa inválido"
@@ -52,6 +54,7 @@ public class Vehiculo {
     private String linea;
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<VehiculoDocumento> documentos = new ArrayList<>();
 
     public Vehiculo() {

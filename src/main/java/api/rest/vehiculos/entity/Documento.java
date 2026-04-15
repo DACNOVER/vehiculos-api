@@ -1,6 +1,7 @@
 package api.rest.vehiculos.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Documento {
@@ -9,10 +10,20 @@ public class Documento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String codigo;
+    
+    @NotBlank
     private String nombre;
+    
+    @NotBlank
+    @Pattern(regexp = "^(A|M|AM)$", message = "Tipo de vehículo debe ser A, M o AM")
     private String tipoVehiculoAplica;
+    
+    @NotBlank
+    @Pattern(regexp = "^(RA|RM|RR)$", message = "Obligatorio debe ser RA, RM o RR")
     private String obligatorio;
+    
     private String descripcion;
 
     public Documento() {}

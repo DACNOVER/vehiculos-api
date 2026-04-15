@@ -1,6 +1,8 @@
 package api.rest.vehiculos.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
@@ -12,6 +14,7 @@ public class VehiculoDocumento {
 
     @ManyToOne
     @JoinColumn(name = "vehiculo_id")
+    @JsonBackReference
     private Vehiculo vehiculo;
 
     @ManyToOne
@@ -19,7 +22,11 @@ public class VehiculoDocumento {
     private Documento documento;
 
     private LocalDate fechaExpedicion;
+    
     private LocalDate fechaVencimiento;
+    
+    @NotBlank
+    @Pattern(regexp = "^(Habilitado|Vencido|En Verificación)$", message = "Estado debe ser Habilitado, Vencido o En Verificación")
     private String estado;
 
     // GETTERS Y SETTERS
