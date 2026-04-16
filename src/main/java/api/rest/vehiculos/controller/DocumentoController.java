@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/documentos")
+@RequestMapping("/api/documentos")
 public class DocumentoController {
 
     @Autowired

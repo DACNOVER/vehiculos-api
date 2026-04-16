@@ -115,7 +115,7 @@ async function toggleVehiculoForm(vehiculo = null) {
 // Cargar documentos en el select
 async function loadDocumentosSelect() {
     try {
-        const response = await fetch(`${baseUrl}/documentos`);
+        const response = await fetch(`${baseUrl}/api/documentos`);
         const documentos = await response.json();
         const select = document.getElementById('documentoSelect');
         
@@ -204,7 +204,7 @@ function showToast(message, type = 'success') {
 // Load Vehiculos
 async function loadVehiculos() {
     try {
-        const response = await fetch(`${baseUrl}/vehiculos`);
+        const response = await fetch(`${baseUrl}/api/vehiculos`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -298,7 +298,7 @@ function createVehiculoCard(v) {
 // Load Documentos
 async function loadDocumentos() {
     try {
-        const response = await fetch(`${baseUrl}/documentos`);
+        const response = await fetch(`${baseUrl}/api/documentos`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -419,7 +419,7 @@ document.getElementById('vehiculoForm')?.addEventListener('submit', async (e) =>
     console.log('Modo edición:', editingVehiculoId ? 'ACTUALIZAR (ID: ' + editingVehiculoId + ')' : 'CREAR');
     
     try {
-        const url = editingVehiculoId ? `${baseUrl}/vehiculos/${editingVehiculoId}` : `${baseUrl}/vehiculos`;
+        const url = editingVehiculoId ? `${baseUrl}/api/vehiculos/${editingVehiculoId}` : `${baseUrl}/api/vehiculos`;
         const method = editingVehiculoId ? 'PUT' : 'POST';
         
         console.log('URL:', url);
@@ -497,7 +497,7 @@ document.getElementById('documentoForm')?.addEventListener('submit', async (e) =
     try {
         // Determinar si es creación o actualización
         const isEdit = editingDocumentoId !== null;
-        const url = isEdit ? `${baseUrl}/documentos/${editingDocumentoId}` : `${baseUrl}/documentos`;
+        const url = isEdit ? `${baseUrl}/api/documentos/${editingDocumentoId}` : `${baseUrl}/api/documentos`;
         const method = isEdit ? 'PUT' : 'POST';
         
         const response = await fetch(url, {
@@ -535,7 +535,7 @@ async function buscarPorPlaca() {
     }
     
     try {
-        const response = await fetch(`${baseUrl}/vehiculos/buscar/placa/${placa}`);
+        const response = await fetch(`${baseUrl}/api/vehiculos/buscar/placa/${placa}`);
         if (response.ok) {
             const vehiculo = await response.json();
             displaySearchResults([vehiculo]);
@@ -553,7 +553,7 @@ async function buscarPorTipo() {
     const tipo = document.getElementById('searchTipoInput').value;
     
     try {
-        const response = await fetch(`${baseUrl}/vehiculos/buscar/tipo/${tipo}`);
+        const response = await fetch(`${baseUrl}/api/vehiculos/buscar/tipo/${tipo}`);
         const vehiculos = await response.json();
         displaySearchResults(vehiculos);
     } catch (error) {
@@ -570,7 +570,7 @@ async function buscarPorDocumento() {
     }
     
     try {
-        const response = await fetch(`${baseUrl}/vehiculos/buscar/documento/${documento}`);
+        const response = await fetch(`${baseUrl}/api/vehiculos/buscar/documento/${documento}`);
         const vehiculos = await response.json();
         displaySearchResults(vehiculos);
     } catch (error) {
@@ -583,7 +583,7 @@ async function buscarPorEstado() {
     const estado = document.getElementById('searchEstadoInput').value;
     
     try {
-        const response = await fetch(`${baseUrl}/vehiculos/buscar/estado/${encodeURIComponent(estado)}`);
+        const response = await fetch(`${baseUrl}/api/vehiculos/buscar/estado/${encodeURIComponent(estado)}`);
         const vehiculos = await response.json();
         displaySearchResults(vehiculos);
     } catch (error) {
@@ -618,7 +618,7 @@ document.getElementById('searchVehiculo')?.addEventListener('input', (e) => {
 // Editar vehículo
 async function editarVehiculo(id) {
     try {
-        const response = await fetch(`${baseUrl}/vehiculos/${id}`);
+        const response = await fetch(`${baseUrl}/api/vehiculos/${id}`);
         if (response.ok) {
             const vehiculo = await response.json();
             
@@ -649,7 +649,7 @@ function confirmarEliminarVehiculo(id, placa) {
 // Eliminar vehículo
 async function eliminarVehiculo(id) {
     try {
-        const response = await fetch(`${baseUrl}/vehiculos/${id}`, {
+        const response = await fetch(`${baseUrl}/api/vehiculos/${id}`, {
             method: 'DELETE'
         });
         
@@ -722,7 +722,7 @@ let editingDocumentoId = null;
 // Editar documento
 async function editarDocumento(id) {
     try {
-        const response = await fetch(`${baseUrl}/documentos/${id}`);
+        const response = await fetch(`${baseUrl}/api/documentos/${id}`);
         if (response.ok) {
             const documento = await response.json();
             
@@ -763,7 +763,7 @@ function confirmarEliminarDocumento(id, nombre) {
 // Eliminar documento
 async function eliminarDocumento(id) {
     try {
-        const response = await fetch(`${baseUrl}/documentos/${id}`, {
+        const response = await fetch(`${baseUrl}/api/documentos/${id}`, {
             method: 'DELETE'
         });
         
